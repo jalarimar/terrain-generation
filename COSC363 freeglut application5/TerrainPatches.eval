@@ -1,0 +1,61 @@
+#version 400
+
+layout(quads, equal_spacing, ccw) in;
+
+// 4 long, 1 for each patch vertex
+in vec2 tc_TexCoord[];
+in vec3 tc_Col[];
+
+uniform sampler2D heightMap;
+uniform sampler2D heightMapRiver;
+uniform sampler2D heightMapThird;
+uniform int texNum;
+
+out vec2 te_TexCoord;
+out vec3 te_Col;
+
+void main()
+{
+	// runs for each tessellation coordinate which it makes into a vertex within the quad patch
+	// maps the height map texture to the tesselated mesh
+
+    float u = gl_TessCoord.x;
+    float v = gl_TessCoord.y;
+
+    vec4 posn = (1-u)* (1-v) * gl_in[0].gl_Position
+        + u * (1-v) *	  gl_in[1].gl_Position
+		 + u * v *        gl_in[2].gl_Position
+		 + (1-u) * v *    gl_in[3].gl_Position;
+
+	vec2 interTex = (1-u)* (1-v) * tc_TexCoord[0]
+         + u * (1-v) *			tc_TexCoord[1]
+		 + u * v *				tc_TexCoord[2]
+		 + (1-u) * v *			tc_TexCoord[3];
+	te_TexCoord = interTex;
+
+	vec3 interCol = (1-u)* (1-v) * tc_Col[0]
+         + u * (1-v) *			tc_Col[1]
+		 + u * v *				tc_Col[2]
+		 + (1-u) * v *			tc_Col[3];
+	te_Col = interCol;
+
+
+	// st ends up being the same thing as interTex, TODO remove one of them
+	float s = (posn.x + 45) / 90;
+	float t = posn.z / -100;
+	vec2 st = vec2(s, t);
+
+	vec4 texHeight;
+	if (texNum == 1) {
+		texHeight = texture(heightMap, st);
+	}
+	if (texNum == 2) {
+		texHeight = texture(heightMapRiver, st);
+	}
+	if (texNum == 3) {
+		texHeight = texture(heightMapThird, st);
+	}
+
+	posn.y = 10 * texHeight.x;
+    gl_Position = posn;
+}

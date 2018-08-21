@@ -1,0 +1,38 @@
+#version 400
+
+layout(vertices = 4) out;
+
+in vec2 v_TexCoord[];
+in vec3 v_Col[];
+
+uniform mat4 mvpMatrix;
+uniform mat4 mvMatrix;
+
+out vec2 tc_TexCoord[];
+out vec3 tc_Col[];
+
+void main()
+{
+	// sets outer and inner tess levels based on average z of 4 patch vertices
+
+	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+	tc_TexCoord[gl_InvocationID] = v_TexCoord[gl_InvocationID];
+	tc_Col[gl_InvocationID] = v_Col[gl_InvocationID];
+
+	float zavg = -1 * ((mvpMatrix * gl_in[0].gl_Position).z + 
+						(mvpMatrix * gl_in[1].gl_Position).z + 
+						(mvpMatrix * gl_in[2].gl_Position).z + 
+						(mvpMatrix * gl_in[3].gl_Position).z) / 4;
+
+	float level = (((zavg + 100) * 18) / 300) + 12; // 12 to 18
+
+	float outerLevel = 12;
+
+    gl_TessLevelOuter[0] = outerLevel;
+    gl_TessLevelOuter[1] = outerLevel;
+    gl_TessLevelOuter[2] = outerLevel;
+    gl_TessLevelOuter[3] = outerLevel;
+
+    gl_TessLevelInner[0] = level;
+    gl_TessLevelInner[1] = level;
+}
