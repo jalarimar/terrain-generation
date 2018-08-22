@@ -300,7 +300,7 @@ void initialise()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-	glClearColor(1.0f, 1.0f, 0.0f, 1.0f); // background colour
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // background colour
 
 
 	// second program
@@ -356,11 +356,10 @@ void display()
 
 	// !!!!!!!!!!!!!!!!!!!!!!
 
+	glDrawArrays(GL_POINTS, 24, 1);
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glBindVertexArray(vaoID);
-
-	glDrawArrays(GL_TRIANGLES, 0, 100*3);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glDrawArrays(GL_TRIANGLES, 0, 100*3);
 
 	// !!!!!!!!!!!!!!!!!!!!!!
 

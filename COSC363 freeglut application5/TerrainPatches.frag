@@ -2,8 +2,8 @@
 
 smooth in vec4 g_TexWeight;
 smooth in float g_TexWeightSand;
-//smooth in vec2 g_TexCoord;
-//smooth in vec4 g_Col;
+smooth in vec2 g_TexCoord;
+smooth in vec4 g_Col;
 smooth in float g_Diffuse;
 
 uniform sampler2D snow;
