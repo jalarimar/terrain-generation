@@ -8,6 +8,8 @@ in vec3 v_Col[];
 uniform mat4 mvpMatrix;
 uniform mat4 mvMatrix;
 
+uniform sampler2D heightMap;
+
 out vec2 tc_TexCoord[];
 out vec3 tc_Col[];
 
@@ -27,6 +29,16 @@ void main()
 	float level = (((zavg + 100) * 18) / 300) + 12; // 12 to 18
 
 	float outerLevel = 12;
+
+	vec4 texHeight = texture(heightMap, v_TexCoord[0]);
+	vec4 texHeight2 = texture(heightMap, v_TexCoord[1]);
+	vec4 texHeight3 = texture(heightMap, v_TexCoord[2]);
+	vec4 texHeight4 = texture(heightMap, v_TexCoord[3]);
+
+	if (texHeight.x - texHeight2.x < 0.1 && texHeight.x - texHeight2.x > -0.1 ) {
+		//outerLevel = 1;
+		//level = 0;
+	}
 
     gl_TessLevelOuter[0] = outerLevel;
     gl_TessLevelOuter[1] = outerLevel;

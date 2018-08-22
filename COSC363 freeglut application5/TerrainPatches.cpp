@@ -66,7 +66,7 @@ float pitch = -20;
 float snowLevel = 7;
 float waterLevel = 1.5;
 
-bool key_w = false;
+bool key_w = true;
 int key_num = 1;
 
 //Generate vertex and element data for the terrain floor
@@ -186,7 +186,7 @@ void loadTextures()
 	glGenTextures(1, &texID9);
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_2D, texID9);
-	loadTGA("Rainbow.tga");
+	loadTGA("Butterfly.tga");
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -339,9 +339,9 @@ void initialise()
 	mvpMatrixLoc2 = glGetUniformLocation(program2, "mvpMatrix");
 	texLoc9 = glGetUniformLocation(program2, "sprite");
 
-	GLfloat vert[3];
+	GLfloat vert[6];
 	vert[0] = 10;
-	vert[1] = 6; // todo set to water level and update vert y in display
+	vert[1] = 6; // 6 cloud, 4 butterfly, 4 rainbow
 	vert[2] = -40;
 
 	GLuint vboID2[1];
@@ -410,14 +410,15 @@ void display()
 	glDrawElements(GL_PATCHES, 81*4, GL_UNSIGNED_SHORT, NULL);
 
 	// !!!!!!!!!!!!!!!!!!!!!!
-	glUseProgram(program2);
+	if (!key_w) {
+		glUseProgram(program2);
 
-	glUniformMatrix4fv(mvpMatrixLoc2, 1, GL_FALSE, &projView[0][0]);
-	glUniform1i(texLoc9, 8);
+		glUniformMatrix4fv(mvpMatrixLoc2, 1, GL_FALSE, &projView[0][0]);
+		glUniform1i(texLoc9, 8);
 
-	glBindVertexArray(vaoID2);
-	glDrawArrays(GL_POINTS, 0, 1);
-
+		glBindVertexArray(vaoID2);
+		glDrawArrays(GL_POINTS, 0, 1);
+	}
 	// !!!!!!!!!!!!!!!!!!!!!!
 
 	glFlush();
