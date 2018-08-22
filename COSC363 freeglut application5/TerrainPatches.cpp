@@ -186,7 +186,7 @@ void loadTextures()
 	glGenTextures(1, &texID9);
 	glActiveTexture(GL_TEXTURE8);
 	glBindTexture(GL_TEXTURE_2D, texID9);
-	loadTGA("Tree.tga");
+	loadTGA("Rainbow.tga");
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -341,7 +341,7 @@ void initialise()
 
 	GLfloat vert[3];
 	vert[0] = 10;
-	vert[1] = 4; // todo set to water level and update vert y in display
+	vert[1] = 6; // todo set to water level and update vert y in display
 	vert[2] = -40;
 
 	GLuint vboID2[1];
