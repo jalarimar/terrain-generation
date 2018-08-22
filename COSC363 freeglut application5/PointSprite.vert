@@ -6,15 +6,8 @@ layout (location = 2) in vec3 colour;
 
 uniform mat4 mvpMatrix;
 
-
-out vec2 v_TexCoord;
-out vec3 v_Col;
-
 void main()
 {
-   //pass through shader, position in world coords
-
-   gl_Position = vec4(position, 1.0);
-   v_TexCoord = texCoord;
-   v_Col = colour; 
+	gl_Position = mvpMatrix * vec4(position, 1.0);
+	gl_PointSize = 220;
 }

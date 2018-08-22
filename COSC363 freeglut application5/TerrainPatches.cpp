@@ -18,9 +18,14 @@
 #include "loadTGA.h"
 using namespace std;
 
+GLuint program;
+GLuint program2;
+
 GLuint vaoID;
-GLuint theProgram;
+GLuint vaoID2;
+
 GLuint mvpMatrixLoc;
+GLuint mvpMatrixLoc2;
 GLuint mvMatrixLoc;
 GLuint norMatrixLoc;
 GLuint lightLoc;
@@ -28,6 +33,16 @@ GLint texNumLoc;
 GLint wireLoc;
 GLint snowLoc;
 GLint waterLoc;
+
+GLint texLoc;
+GLint texLoc2;
+GLint texLoc3;
+GLint texLoc4;
+GLint texLoc5;
+GLint texLoc6;
+GLint texLoc7;
+GLint texLoc8;
+GLint texLoc9; //sprite
 
 
 float CDR = 3.14159265/180.0;     //Conversion from degrees to rad (required in GLM 0.9.6)
@@ -51,7 +66,7 @@ float pitch = -20;
 float snowLevel = 7;
 float waterLevel = 1.5;
 
-bool key_w = true;
+bool key_w = false;
 int key_num = 1;
 
 //Generate vertex and element data for the terrain floor
@@ -166,6 +181,15 @@ void loadTextures()
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+	GLuint texID9;
+	glGenTextures(1, &texID9);
+	glActiveTexture(GL_TEXTURE8);
+	glBindTexture(GL_TEXTURE_2D, texID9);
+	loadTGA("Tree.tga");
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 }
 
 
@@ -212,8 +236,7 @@ void initialise()
 	GLuint shaderg = loadShader(GL_GEOMETRY_SHADER, "TerrainPatches.geom");
 	GLuint shaderf = loadShader(GL_FRAGMENT_SHADER, "TerrainPatches.frag");
 
-
-	GLuint program = glCreateProgram();
+	program = glCreateProgram();
 	glAttachShader(program, shaderv);
 	glAttachShader(program, shaderc);
 	glAttachShader(program, shadere);
@@ -232,7 +255,6 @@ void initialise()
 		fprintf(stderr, "Linker failure: %s\n", strInfoLog);
 		delete[] strInfoLog;
 	}
-	glUseProgram(program);
 
 	mvpMatrixLoc = glGetUniformLocation(program, "mvpMatrix");
 	mvMatrixLoc = glGetUniformLocation(program, "mvMatrix");
@@ -244,29 +266,15 @@ void initialise()
 	snowLoc = glGetUniformLocation(program, "snowLevel");
 	waterLoc = glGetUniformLocation(program, "waterLevel");
 
-	GLuint texLoc = glGetUniformLocation(program, "heightMap");
-	glUniform1i(texLoc, 0);
+	texLoc = glGetUniformLocation(program, "heightMap");
+	texLoc2 = glGetUniformLocation(program, "grass");
+	texLoc3 = glGetUniformLocation(program, "stone");
+	texLoc4 = glGetUniformLocation(program, "water");
+	texLoc5 = glGetUniformLocation(program, "snow");
+	texLoc6 = glGetUniformLocation(program, "heightMapRiver");
+	texLoc7 = glGetUniformLocation(program, "sand");
+	texLoc8 = glGetUniformLocation(program, "heightMapThird");
 
-	GLuint texLoc2 = glGetUniformLocation(program, "grass");
-	glUniform1i(texLoc2, 1);
-
-	GLuint texLoc3 = glGetUniformLocation(program, "stone");
-	glUniform1i(texLoc3, 2);
-
-	GLuint texLoc4 = glGetUniformLocation(program, "water");
-	glUniform1i(texLoc4, 3);
-
-	GLuint texLoc5 = glGetUniformLocation(program, "snow");
-	glUniform1i(texLoc5, 4);
-
-	GLuint texLoc6 = glGetUniformLocation(program, "heightMapRiver");
-	glUniform1i(texLoc6, 5);
-
-	GLuint texLoc7 = glGetUniformLocation(program, "sand");
-	glUniform1i(texLoc7, 6);
-
-	GLuint texLoc8 = glGetUniformLocation(program, "heightMapThird");
-	glUniform1i(texLoc8, 7);
 
 //---------Load buffer data-----------------------
 	generateData();
@@ -303,15 +311,52 @@ void initialise()
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // background colour
 
 
-	// second program
+//------- second program ------------------------------
+
+	glEnable(GL_POINT_SPRITE);
+	glEnable(GL_PROGRAM_POINT_SIZE);
+	glPointParameteri(GL_POINT_SPRITE_COORD_ORIGIN, GL_LOWER_LEFT);
 
 	GLuint shaderv_p = loadShader(GL_VERTEX_SHADER, "PointSprite.vert");
 	GLuint shaderf_p = loadShader(GL_FRAGMENT_SHADER, "PointSprite.frag");
 
-	GLuint program2 = glCreateProgram();
+	program2 = glCreateProgram();
 	glAttachShader(program2, shaderv_p);
 	glAttachShader(program2, shaderf_p);
 	glLinkProgram(program2);
+
+	glGetProgramiv(program2, GL_LINK_STATUS, &status);
+	if (status == GL_FALSE)
+	{
+		GLint infoLogLength;
+		glGetProgramiv(program2, GL_INFO_LOG_LENGTH, &infoLogLength);
+		GLchar *strInfoLog = new GLchar[infoLogLength + 1];
+		glGetProgramInfoLog(program2, infoLogLength, NULL, strInfoLog);
+		fprintf(stderr, "Linker failure: %s\n", strInfoLog);
+		delete[] strInfoLog;
+	}
+
+	mvpMatrixLoc2 = glGetUniformLocation(program2, "mvpMatrix");
+	texLoc9 = glGetUniformLocation(program2, "sprite");
+
+	GLfloat vert[3];
+	vert[0] = 10;
+	vert[1] = 4; // todo set to water level and update vert y in display
+	vert[2] = -40;
+
+	GLuint vboID2[1];
+
+	glGenVertexArrays(1, &vaoID2);
+
+	glBindVertexArray(vaoID2);
+	glGenBuffers(1, vboID2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboID2[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vert), vert, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+	glEnableVertexAttribArray(0);      // Vertex position
+
+	glBindVertexArray(0);
 }
 
 //Display function to compute uniform values based on transformation parameters and to draw the scene
@@ -332,6 +377,8 @@ void display()
 	glm::vec4 light = glm::vec4(0.0, 50.0, -10.0, 1.0); // world coords
 	lightPos = view * light; // eye coords
 
+	glUseProgram(program);
+
 	glUniformMatrix4fv(mvpMatrixLoc, 1, GL_FALSE, &projView[0][0]);
 	glUniformMatrix4fv(mvMatrixLoc, 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(norMatrixLoc, 1, GL_TRUE, &normal[0][0]);
@@ -342,6 +389,14 @@ void display()
 	glUniform1f(snowLoc, snowLevel);
 	glUniform1f(waterLoc, waterLevel);
 
+	glUniform1i(texLoc, 0);
+	glUniform1i(texLoc2, 1);
+	glUniform1i(texLoc3, 2);
+	glUniform1i(texLoc4, 3);
+	glUniform1i(texLoc5, 4);
+	glUniform1i(texLoc6, 5);
+	glUniform1i(texLoc7, 6);
+	glUniform1i(texLoc8, 7);
 
 	if (key_w) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -355,11 +410,13 @@ void display()
 	glDrawElements(GL_PATCHES, 81*4, GL_UNSIGNED_SHORT, NULL);
 
 	// !!!!!!!!!!!!!!!!!!!!!!
+	glUseProgram(program2);
 
-	glDrawArrays(GL_POINTS, 24, 1);
-	
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glDrawArrays(GL_TRIANGLES, 0, 100*3);
+	glUniformMatrix4fv(mvpMatrixLoc2, 1, GL_FALSE, &projView[0][0]);
+	glUniform1i(texLoc9, 8);
+
+	glBindVertexArray(vaoID2);
+	glDrawArrays(GL_POINTS, 0, 1);
 
 	// !!!!!!!!!!!!!!!!!!!!!!
 
