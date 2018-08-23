@@ -308,7 +308,7 @@ void initialise()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // background colour
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // background colour
 
 
 //------- second program ------------------------------
@@ -400,9 +400,11 @@ void display()
 
 	if (key_w) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	}
 	else {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);

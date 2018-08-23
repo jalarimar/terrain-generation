@@ -13,6 +13,10 @@ uniform sampler2D heightMap;
 out vec2 tc_TexCoord[];
 out vec3 tc_Col[];
 
+float calcLevel(float zavg) {
+	return (((zavg + 100) * 18) / 300) + 12; // 12 to 18
+}
+
 void main()
 {
 	// sets outer and inner tess levels based on average z of 4 patch vertices
@@ -21,29 +25,27 @@ void main()
 	tc_TexCoord[gl_InvocationID] = v_TexCoord[gl_InvocationID];
 	tc_Col[gl_InvocationID] = v_Col[gl_InvocationID];
 
-	float zavg = -1 * ((mvpMatrix * gl_in[0].gl_Position).z + 
-						(mvpMatrix * gl_in[1].gl_Position).z + 
-						(mvpMatrix * gl_in[2].gl_Position).z + 
-						(mvpMatrix * gl_in[3].gl_Position).z) / 4;
+	float z0 = (mvpMatrix * gl_in[0].gl_Position).z;
+	float z1 = (mvpMatrix * gl_in[1].gl_Position).z;
+	float z2 = (mvpMatrix * gl_in[2].gl_Position).z;
+	float z3 = (mvpMatrix * gl_in[3].gl_Position).z;
 
-	float level = (((zavg + 100) * 18) / 300) + 12; // 12 to 18
+	float level = calcLevel(-0.25 * (z0 + z1 + z2 + z3));
 
-	float outerLevel = 12;
+	float zavgLeft = calcLevel(-0.5 * (z0 + z3));
+	float zavgRight = calcLevel(-0.5 * (z1 + z2));
+	float zavgUp = calcLevel(-0.5 * (z2 + z3));
+	float zavgDown = calcLevel(-0.5 * (z0 + z1)); 
 
-	vec4 texHeight = texture(heightMap, v_TexCoord[0]);
-	vec4 texHeight2 = texture(heightMap, v_TexCoord[1]);
-	vec4 texHeight3 = texture(heightMap, v_TexCoord[2]);
-	vec4 texHeight4 = texture(heightMap, v_TexCoord[3]);
+	float outerLevelLeft = zavgLeft;
+	float outerLevelRight = zavgRight;
+	float outerLevelUp = zavgUp;
+	float outerLevelDown = zavgDown;
 
-	if (texHeight.x - texHeight2.x < 0.1 && texHeight.x - texHeight2.x > -0.1 ) {
-		//outerLevel = 1;
-		//level = 0;
-	}
-
-    gl_TessLevelOuter[0] = outerLevel;
-    gl_TessLevelOuter[1] = outerLevel;
-    gl_TessLevelOuter[2] = outerLevel;
-    gl_TessLevelOuter[3] = outerLevel;
+    gl_TessLevelOuter[0] = outerLevelLeft;
+    gl_TessLevelOuter[1] = outerLevelDown;
+    gl_TessLevelOuter[2] = outerLevelRight;
+    gl_TessLevelOuter[3] = outerLevelUp;
 
     gl_TessLevelInner[0] = level;
     gl_TessLevelInner[1] = level;
