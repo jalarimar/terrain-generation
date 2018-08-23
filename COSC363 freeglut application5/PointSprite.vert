@@ -10,5 +10,6 @@ void main()
 {
 	gl_Position = mvpMatrix * vec4(position, 1.0);
 	//gl_PointSize = 180 - 0.7 * gl_Position.z;
-	
+	float pointSize = 180.0;
+	gl_PointSize = (1.0 - gl_Position.z / gl_Position.w) * pointSize;
 }

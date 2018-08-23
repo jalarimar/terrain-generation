@@ -1,13 +1,10 @@
 ﻿  TerrainPatches.cpp
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(50): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(48): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(82): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(84): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(86): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(89): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(87): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(88): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(90): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(92): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(93): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(343): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(386): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(426): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+c:\users\jay\documents\visual studio 2015\projects\cosc363 freeglut application5\cosc363 freeglut application5\terrainpatches.cpp(91): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   COSC363 freeglut application5.vcxproj -> C:\Users\Jay\Documents\Visual Studio 2015\Projects\COSC363 freeglut application5\Debug\COSC363 freeglut application5.exe
   COSC363 freeglut application5.vcxproj -> C:\Users\Jay\Documents\Visual Studio 2015\Projects\COSC363 freeglut application5\Debug\COSC363 freeglut application5.pdb (Full PDB)

@@ -66,7 +66,7 @@ float pitch = -20;
 float snowLevel = 7;
 float waterLevel = 1.5;
 
-bool key_w = true;
+bool key_w = false;
 int key_num = 1;
 
 //Generate vertex and element data for the terrain floor
