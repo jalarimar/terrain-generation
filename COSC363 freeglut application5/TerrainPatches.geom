@@ -3,7 +3,7 @@
 layout (triangles) in;
 layout (triangle_strip, max_vertices=3) out;
 
-in vec2 te_TexCoord[];
+in vec2 te_TexCoord[3];
 in vec3 te_Col[];
 
 uniform mat4 mvpMatrix;
@@ -17,7 +17,7 @@ uniform float waterLevel;
 out vec4 g_TexWeight;
 out float g_TexWeightSand;
 out vec2 g_TexCoord;
-out vec4 g_Col;
+//out vec4 g_Col;
 out float g_Diffuse;
 
 void main()
@@ -50,7 +50,11 @@ void main()
 		float sand_range = 0.4f;
 
 		if (height < waterLevel) { // water
-			weight = vec4(0, 0, 0, 1);
+			float diff = waterLevel - height;
+			float mindiff = 0;
+			float maxdiff = 5;
+			float w = max(0.1, 1 - diff / 2);
+			weight = vec4(0, 0, 0, w);
 			gl_Position.y = waterLevel;
 		} else if (height < snowLevel && height > snowLevel - snow_range && height >= waterLevel + sand_range && height > rockLevel) { // snow rock blend
 			float snow_weight = (height - (snowLevel - snow_range)) / snow_range;
@@ -83,7 +87,7 @@ void main()
 		g_TexWeight = weight;
 		g_TexWeightSand = sandWeight;
 		g_TexCoord = te_TexCoord[i];
-		g_Col = vec4(te_Col[i], 1);
+		//g_Col = vec4(te_Col[i], 1);
 		EmitVertex();
 	}
 	EndPrimitive();

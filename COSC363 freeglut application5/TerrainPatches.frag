@@ -3,7 +3,7 @@
 smooth in vec4 g_TexWeight;
 smooth in float g_TexWeightSand;
 smooth in vec2 g_TexCoord;
-smooth in vec4 g_Col;
+//smooth in vec4 g_Col;
 smooth in float g_Diffuse;
 
 uniform sampler2D snow;
@@ -18,6 +18,7 @@ uniform int pass;
 void main() 
 {
 	// assigns colour based on texture weight
+	vec2 gg_TexCoord = vec2(0.4, 0.5);
 
 	vec4 snowCol = texture(snow, g_TexCoord * 4);
 	vec4 stoneCol = texture(stone, g_TexCoord * 5) + vec4(0.1, 0.1, 0.1, 1);
@@ -32,7 +33,6 @@ void main()
 	gl_FragColor = (ambient * texCol) + (g_Diffuse * texCol);
 
 	if (is_wireframe == 1) {
-		gl_FragColor = vec4(0, 0, 1, 1);
-		gl_FragColor = g_Col;
+		gl_FragColor = vec4(1, 0, 0, 1); //g_Col;
 	}
 }
