@@ -51,10 +51,9 @@ void main()
 
 		if (height < waterLevel) { // water
 			float diff = waterLevel - height;
-			float mindiff = 0;
-			float maxdiff = 5;
-			float w = max(0.1, 1 - diff / 2);
-			weight = vec4(0, 0, 0, w);
+			float range = 1.5 * waterLevel;
+			float w = max(0.2, abs(1 - diff / range));
+			weight = vec4(0, 0, 0, w*1.2);
 			gl_Position.y = waterLevel;
 		} else if (height < snowLevel && height > snowLevel - snow_range && height >= waterLevel + sand_range && height > rockLevel) { // snow rock blend
 			float snow_weight = (height - (snowLevel - snow_range)) / snow_range;
