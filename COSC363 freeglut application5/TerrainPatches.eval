@@ -4,7 +4,6 @@ layout(quads, equal_spacing, ccw) in;
 
 // 4 long, 1 for each patch vertex
 in vec2 tc_TexCoord[];
-in vec3 tc_Col[];
 
 uniform sampler2D heightMap;
 uniform sampler2D heightMapRiver;
@@ -12,7 +11,6 @@ uniform sampler2D heightMapThird;
 uniform int texNum;
 
 out vec2 te_TexCoord;
-out vec3 te_Col;
 
 void main()
 {
@@ -33,27 +31,15 @@ void main()
 		 + (1-u) * v *			tc_TexCoord[3];
 	te_TexCoord = interTex;
 
-	vec3 interCol = (1-u)* (1-v) * tc_Col[0]
-         + u * (1-v) *			tc_Col[1]
-		 + u * v *				tc_Col[2]
-		 + (1-u) * v *			tc_Col[3];
-	te_Col = interCol;
-
-
-	// st ends up being the same thing as interTex, TODO remove one of them
-	float s = (posn.x + 45) / 90;
-	float t = posn.z / -100;
-	vec2 st = vec2(s, t);
-
 	vec4 texHeight;
 	if (texNum == 1) {
-		texHeight = texture(heightMap, st);
+		texHeight = texture(heightMap, te_TexCoord);
 	}
 	if (texNum == 2) {
-		texHeight = texture(heightMapRiver, st);
+		texHeight = texture(heightMapRiver, te_TexCoord);
 	}
 	if (texNum == 3) {
-		texHeight = texture(heightMapThird, st);
+		texHeight = texture(heightMapThird, te_TexCoord);
 	}
 
 	posn.y = 10 * texHeight.x;

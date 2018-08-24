@@ -84,8 +84,8 @@ void generateData()
 			verts[3*indx+2] = -10*j;		//z varies from 0 to -100
 
 			colors[3*indx] = 1.0; // color red
-			colors[3*indx+1] = (float)i / 9.0;
-			colors[3*indx+2] = (float)j / 9.0;
+			colors[3*indx+1] = (float)i / 9.0; // green
+			colors[3*indx+2] = (float)j / 9.0; // blue
 
 			texcoords[2*indx] = (float)i/9.0;    //s
 			texcoords[2*indx+1] = (float)j/9.0;  //t
@@ -123,7 +123,7 @@ void loadTextures()
 	glGenTextures(1, &texID2);
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texID2);
-	loadTGA("grass4.tga");
+	loadTGA("grass5.tga");
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -341,7 +341,7 @@ void initialise()
 
 	GLfloat vert[6];
 	vert[0] = 10;
-	vert[1] = 6; // 6 cloud, 4 butterfly, 4 rainbow
+	vert[1] = 6;
 	vert[2] = -40;
 
 	GLuint vboID2[1];
@@ -411,7 +411,7 @@ void display()
 	glBindVertexArray(vaoID);
 	glDrawElements(GL_PATCHES, 81*4, GL_UNSIGNED_SHORT, NULL);
 
-	// !!!!!!!!!!!!!!!!!!!!!!
+	// second program
 	if (!key_w) {
 		glUseProgram(program2);
 
@@ -421,7 +421,6 @@ void display()
 		glBindVertexArray(vaoID2);
 		glDrawArrays(GL_POINTS, 0, 1);
 	}
-	// !!!!!!!!!!!!!!!!!!!!!!
 
 	glFlush();
 }
